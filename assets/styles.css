@@ -16,16 +16,17 @@ body {
 .container-central {
   display: flex;
   flex-direction: column;
-  width: 90vw;
-  height: 92vh;
+  width: 95vw;
+  height: 95vh;
   border-radius: 8px;
-  padding: 25px;
+  padding: 10px;
   background-color: rgb(46, 46, 48);
   align-items: center;
 }
 
-.container-central > h1 {
+.container-central>h1 {
   color: rgb(214, 226, 226);
+  margin: 5px 0;
 }
 
 .add-task-container {
@@ -36,7 +37,7 @@ body {
   height: 100%;
 }
 
-.add-task-container > input {
+.add-task-container>input {
   margin: 3px 0;
   padding: 3px;
   font-family: Roboto;
@@ -44,33 +45,33 @@ body {
   width: 100%;
   background-color: rgb(60, 60, 63);
   border: 2px solid rgb(60, 60, 63, 0);
-  color:rgb(196, 186, 216);
+  color: rgb(196, 186, 216);
   outline: none;
-  color:rgb(196, 186, 216);
+  color: rgb(196, 186, 216);
   box-shadow: 0 0 3px rgba(139, 139, 139, 0.521);
 }
 
-.add-task-container > label {
+.add-task-container>label {
   font-size: 1em;
   color: rgb(214, 226, 226);
   margin: 3px 0
 }
 
-.add-task-container > input:hover {
+.add-task-container>input:hover {
   background-color: rgb(76, 76, 80);
-  color:rgb(157, 106, 253);
+  color: rgb(157, 106, 253);
 }
 
-.add-task-container > input:focus {
+.add-task-container>input:focus {
   background-color: rgb(76, 76, 80);
   border: 2px solid rgb(89, 0, 255);
-  color:rgb(157, 106, 253);
+  color: rgb(157, 106, 253);
 }
 
-.add-task-container > input:active {
+.add-task-container>input:active {
   background-color: rgb(76, 76, 80);
   border: 2px solid rgb(89, 0, 255);
-  color:rgb(157, 106, 253);
+  color: rgb(157, 106, 253);
 }
 
 .container-tasks {
@@ -81,11 +82,11 @@ body {
   height: 100%;
 }
 
-.container-tasks > h3 {
+.container-tasks>h3 {
   color: rgb(214, 226, 226);
 }
 
-.container-tasks > ul {
+.container-tasks>ul {
   display: flex;
   margin: 0;
   padding: 0;
@@ -96,7 +97,7 @@ body {
   height: 100%;
 }
 
-.container-tasks > ul > li {
+.container-tasks>ul>li {
   display: flex;
   margin: 0;
   list-style: none;
@@ -112,27 +113,28 @@ body {
   text-decoration: line-through;
 }
 
-.container-tasks > ul > li:hover {
+.container-tasks>ul>li:hover {
   background-color: rgb(89, 0, 255);
 }
 
-.container-tasks > ul > li > input {
+.container-tasks>ul>li>input {
   margin-right: 8px;
   cursor: pointer;
 }
 
-.container-tasks > ul > li > .category {
+.container-tasks>ul>li>.category {
   display: flex;
-  color:rgb(255, 202, 212);
+  color: rgb(255, 202, 212);
 }
 
-.container-tasks > ul > li > .separator {
+.container-tasks>ul>li>.separator {
   color: rgb(139, 139, 139);
   display: flex;
   margin: 0 5px;
 }
 
-.container-tasks > ul > li > .separator + .time {
+.container-tasks>ul>li>.separator+.time {
+  margin-left: auto;
   color: rgb(139, 139, 139);
   display: flex;
   color: rgb(4, 255, 171);
