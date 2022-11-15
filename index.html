@@ -1,15 +1,19 @@
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
   <title>Tasks Management</title>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
 <body>
   <div class="container-central" id="app">
     <h1>Gerenciar Tasks</h1>
@@ -19,7 +23,8 @@
         <h3>~ Tasks ~</h3>
         <ul>
           <li v-for="(task, index) of tasks" :class="{ 'concluded-task': task.checked }">
-            <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)" v-model="task.checked">
+            <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
+              v-model="task.checked">
             <span class="category">
               {{task.category}}
             </span>
@@ -36,10 +41,10 @@
               {{formatTime(task.createdAt, task.concludedAt)}}
             </span>
           </li>
-  
+
         </ul>
       </div>
-  
+
       <button class="btn-primary" @click="handleChangePage('add-task')" type="button">
         Adicionar Task
       </button>
@@ -54,7 +59,7 @@
     <template v-if="page === 'history-tasks'">
       <div class="container-tasks" style="height: 76vh">
         <h3>~ Tasks ~</h3>
-        <ul style="overflow-y: scroll; height: fit-content;" >
+        <ul style="overflow-y: scroll; height: fit-content;">
           <li v-for="(task, index) of [...concludedTasks].reverse()">
             <input type="checkbox" style="cursor: not-allowed;" :checked="task.checked" disabled>
             <span class="category">
@@ -73,7 +78,7 @@
               {{formatTime(task.createdAt, task.concludedAt)}}
             </span>
           </li>
-  
+
         </ul>
         <button class="btn-primary" id="asdqw3" @click="handleChangePage('tasks')" type="button">
           Voltar
@@ -98,8 +103,12 @@
             <td style="width: 100px">{{task.category}}</td>
             <td style="width: 150px">{{task.name}}</td>
             <td style="width: 160px">{{task.note}}</td>
-            <td style="width: 175px">{{task.createdAt.toISOString().replace(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}).*$/, '$3/$2/$1 $4')}}</td>
-            <td style="width: 175px">{{task.concludedAt.toISOString().replace(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}).*$/, '$3/$2/$1 $4')}}</td>
+            <td style="width: 175px">
+              {{task.createdAt.toISOString().replace(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}).*$/,
+              '$3/$2/$1 $4')}}</td>
+            <td style="width: 175px">
+              {{task.concludedAt.toISOString().replace(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}:[0-9]{2}:[0-9]{2}).*$/,
+              '$3/$2/$1 $4')}}</td>
             <td style="width: 110px">{{formatTime(task.createdAt, task.concludedAt)}}</td>
           </tr>
         </table>
@@ -167,7 +176,7 @@
       </button>
     </template>
   </div>
-  
+
 </body>
 <script>
   function adapterToLocalStorageDate(item) {
@@ -198,24 +207,24 @@
 
     const textHours = hours < 10
       ? `0${Math.floor(hours)}`
-      : `${Math.floor(hours)}` 
-    
+      : `${Math.floor(hours)}`
+
     const textMinutes = minutes > 1 && (minutes % 60) < 60 && (minutes % 60) > 1
-      ? `${(minutes % 60) < 10 ? '0': ''}${Math.floor((minutes % 60))}`
+      ? `${(minutes % 60) < 10 ? '0' : ''}${Math.floor((minutes % 60))}`
       : "00";
 
-    const textSeconds = `${Math.floor((diffSeconds % 60)) < 10 ? '0': ''}${Math.floor((diffSeconds % 60))}`
+    const textSeconds = `${Math.floor((diffSeconds % 60)) < 10 ? '0' : ''}${Math.floor((diffSeconds % 60))}`
 
     return `${textHours}:${textMinutes}:${textSeconds}`
   }
 
-  function exportData(){
+  function exportData() {
     const data = JSON
       .parse(localStorage.getItem("@concluded-tasks"))
-      .map(item => ({ ...item, createdAt: new Date(item.createdAt), concludedAt: new Date(item.concludedAt)}))
+      .map(item => ({ ...item, createdAt: new Date(item.createdAt), concludedAt: new Date(item.concludedAt) }))
       .map(({ category, name, concludedAt, createdAt }) => `${category}$%${name}$%${formatTime(createdAt, concludedAt)}$%${createdAt}$%${concludedAt}`).join('\n')
-    
-      return data.replace(/\$%/g, '\t')
+
+    return data.replace(/\$%/g, '\t')
   }
 
   const app = new Vue({
@@ -239,7 +248,7 @@
           delete this.tasks[index].concludedAt
         }
       },
-      
+
       handleChangePage(page = 'tasks') {
         this.page = page
       },
@@ -247,17 +256,17 @@
       handleAddTask(event) {
         event.preventDefault?.()
         this.tasks = [
-          ...this.tasks, 
-          { 
-            category: this.newTaskCategory, 
-            name: this.newTaskName, 
+          ...this.tasks,
+          {
+            category: this.newTaskCategory,
+            name: this.newTaskName,
             note: this.newTaskNote,
-            createdAt: new Date() 
+            createdAt: new Date()
           }
         ];
 
         this.newTaskCategory = ''
-        this.newTaskName = '' 
+        this.newTaskName = ''
         this.newTaskNote = ''
         this.handleChangePage('tasks')
       },
@@ -276,10 +285,53 @@
   setInterval(() => {
     app.tasks = app.tasks.map(item => item)
   }, 1_000)
-  
+
+  function onReceiveMessage(event) {
+    if (event.data?.type !== "SET-DATA") return;
+    const items = event.data.data
+
+    if (!Array.isArray(items)) {
+      throw new Error("Array.isArray(items) not is a array")
+    }
+
+    const newTasks = app.tasks.map(item => {
+      if (item.category !== "Trello") return item;
+
+      if (items.includes(item.name)) {
+        return {
+          ...item,
+          checked: false,
+          concludedAt: undefined
+        }
+      } else {
+        return {
+          ...item,
+          checked: true,
+          concludedAt: new Date()
+        }
+      }
+    })
+
+    const namesOfNewTasks = newTasks.map(item => item.name);
+
+    app.tasks = [
+      ...newTasks,
+      ...items
+        .filter(item => !namesOfNewTasks.includes(item))
+        .map(item => ({
+          name: item,
+          category: "Trello",
+          note: "",
+          createdAt: new Date()
+        }))
+    ]
+  }
+
+  window.addEventListener("message", onReceiveMessage)
+
   setInterval(() => {
     app.concludedTasks = [
-      ...app.concludedTasks.filter(adapterValidItems), 
+      ...app.concludedTasks.filter(adapterValidItems),
       ...app.tasks.filter(adapterValidItems).filter(item => (item.concludedAt && item.checked))
     ]
 
@@ -289,7 +341,7 @@
 
     queueMicrotask(() => {
       localStorage.setItem(
-        '@concluded-tasks', 
+        '@concluded-tasks',
         JSON.stringify(app.concludedTasks.map(adapterToLocalStorageDate))
       )
       localStorage.setItem('@tasks', JSON.stringify(app.tasks.map(adapterToLocalStorageDate)))
@@ -298,4 +350,5 @@
 
 
 </script>
+
 </html>
