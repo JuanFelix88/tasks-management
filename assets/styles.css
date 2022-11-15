@@ -1,0 +1,166 @@
+* {
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+  margin: 0%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(34, 34, 34);
+  justify-content: center;
+  align-items: center;
+}
+
+.container-central {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  height: 92vh;
+  border-radius: 8px;
+  padding: 25px;
+  background-color: rgb(46, 46, 48);
+  align-items: center;
+}
+
+.container-central > h1 {
+  color: rgb(214, 226, 226);
+}
+
+.add-task-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.add-task-container > input {
+  margin: 3px 0;
+  padding: 3px;
+  font-family: Roboto;
+  font-size: 1em;
+  width: 100%;
+  background-color: rgb(60, 60, 63);
+  border: 2px solid rgb(60, 60, 63, 0);
+  color:rgb(196, 186, 216);
+  outline: none;
+  color:rgb(196, 186, 216);
+  box-shadow: 0 0 3px rgba(139, 139, 139, 0.521);
+}
+
+.add-task-container > label {
+  font-size: 1em;
+  color: rgb(214, 226, 226);
+  margin: 3px 0
+}
+
+.add-task-container > input:hover {
+  background-color: rgb(76, 76, 80);
+  color:rgb(157, 106, 253);
+}
+
+.add-task-container > input:focus {
+  background-color: rgb(76, 76, 80);
+  border: 2px solid rgb(89, 0, 255);
+  color:rgb(157, 106, 253);
+}
+
+.add-task-container > input:active {
+  background-color: rgb(76, 76, 80);
+  border: 2px solid rgb(89, 0, 255);
+  color:rgb(157, 106, 253);
+}
+
+.container-tasks {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.container-tasks > h3 {
+  color: rgb(214, 226, 226);
+}
+
+.container-tasks > ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  list-style: none;
+  /* align-items: center; */
+  width: 100%;
+  height: 100%;
+}
+
+.container-tasks > ul > li {
+  display: flex;
+  margin: 0;
+  list-style: none;
+  background-color: rgb(62, 63, 65);
+  padding: 3px;
+  color: rgb(255, 255, 255);
+  user-select: none;
+  margin: 3px 0;
+  box-shadow: 0 0 3px rgba(139, 139, 139, 0.521);
+}
+
+.concluded-task {
+  text-decoration: line-through;
+}
+
+.container-tasks > ul > li:hover {
+  background-color: rgb(89, 0, 255);
+}
+
+.container-tasks > ul > li > input {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.container-tasks > ul > li > .category {
+  display: flex;
+  color:rgb(255, 202, 212);
+}
+
+.container-tasks > ul > li > .separator {
+  color: rgb(139, 139, 139);
+  display: flex;
+  margin: 0 5px;
+}
+
+.container-tasks > ul > li > .separator + .time {
+  color: rgb(139, 139, 139);
+  display: flex;
+  color: rgb(4, 255, 171);
+}
+
+.btn-primary {
+  padding: 6px 3px;
+  width: 100%;
+  background-color: rgb(62, 63, 65);
+  color: rgb(255, 255, 255);
+  border: 2px solid rgba(0, 0, 0, 0);
+  margin: 3px;
+  outline: none;
+  box-shadow: 0 0 3px rgba(139, 139, 139, 0.521);
+}
+
+.btn-primary:hover {
+  background-color: rgb(4, 255, 171);
+  color: rgb(49, 49, 49);
+}
+
+.btn-primary:focus {
+  color: rgb(255, 255, 255);
+  border: 2px solid rgb(4, 255, 171);
+}
+
+.btn-primary:active {
+  background-color: rgb(4, 255, 171);
+  color: rgb(49, 49, 49);
+  transform: scale(99%);
+}
