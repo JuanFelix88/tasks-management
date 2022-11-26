@@ -20,7 +20,7 @@
 
     <template v-if="page === 'tasks'">
       <div class="container-tasks">
-        <h3>~ Tasks ~</h3>
+        <!-- <h3 class="m-1 p-0">~ Tasks ~</h3> -->
         <ul>
           <li v-for="(task, index) of tasks" :class="{ 'concluded-task': task.checked }">
             <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
@@ -44,16 +44,17 @@
 
         </ul>
       </div>
-
-      <button class="btn-primary" @click="handleChangePage('add-task')" type="button">
-        Adicionar Task
-      </button>
-      <button class="btn-primary" @click="handleChangePage('history-tasks')" type="button">
-        Acessar Histórico
-      </button>
-      <button class="btn-primary" @click="handleChangePage('report-tasks')" type="button">
-        Report
-      </button>
+      <div class="controls">
+        <button class="btn-primary" @click="handleChangePage('add-task')" type="button">
+          Adicionar Task
+        </button>
+        <button class="btn-primary" @click="handleChangePage('history-tasks')" type="button">
+          Acessar Histórico
+        </button>
+        <button class="btn-primary" @click="handleChangePage('report-tasks')" type="button">
+          Report
+        </button>
+      </div>
     </template>
 
     <template v-if="page === 'history-tasks'">
