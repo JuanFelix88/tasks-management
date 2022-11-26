@@ -308,7 +308,7 @@
         return {
           ...item,
           checked: true,
-          concludedAt: new Date()
+          concludedAt: item.concludedAt || (new Date())
         }
       }
     })
