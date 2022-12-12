@@ -42,6 +42,25 @@
             </span>
           </li>
 
+          <li v-for="(task, index) of standbyTasks" :key="'standby-' + task.id" data-standby="true">
+            <input type="checkbox" :value="false" @change="handleChangeStateTask(index)">
+            <span class="category">
+              {{task.category}}
+            </span>
+            <div class="separator">
+              ::
+            </div>
+            <span class="name">
+              {{ task.name + (task.note ? ` (${task.note})` : '') }}
+            </span>
+            <div class="separator">
+              ::
+            </div>
+            <span class="time standby-time">
+              {{formatTimeJobsStandby(task.jobs)}}
+            </span>
+          </li>
+
         </ul>
       </div>
       <div class="controls">
@@ -75,7 +94,6 @@
               {{formatTimeJobs(task.jobs)}}
             </span>
           </li>
-
         </ul>
       </div>
 
@@ -237,6 +255,26 @@
     return `${textHours}:${textMinutes}:${textSeconds}`
   }
 
+  function formatTimeJobsStandby(jobs) {
+    if (!Array.isArray(jobs)) {
+      throw new Error('"Array.isArray(jobs)" not is a array')
+    }
+
+    const diffSeconds = jobs
+      .reduce((diffSeconds, job) =>
+        diffSeconds + (((job.end ?? job.init).valueOf() - job.init.valueOf()) / 1_000)
+        , 0)
+
+    const hours = (diffSeconds / 60) / 60;
+    const minutes = diffSeconds / 60;
+
+    const textSeconds = Math.floor(diffSeconds % 60).toString().padStart(2, '0');
+    const textMinutes = Math.floor((minutes % 60)).toString().padStart(2, '0')
+    const textHours = Math.floor(hours).toString().padStart(2, '0')
+
+    return `${textHours}:${textMinutes}:${textSeconds}`
+  }
+
   function exportData() {
     const data = JSON
       .parse(localStorage.getItem("@concluded-tasks"))
@@ -254,11 +292,13 @@
       newTaskName: '',
       newTaskNote: '',
       tasks: JSON.parse(localStorage.getItem('@tasks') || '[]').map(adapterFromLocalStorageDate),
+      standbyTasks: [],
       concludedTasks: JSON.parse(localStorage.getItem('@concluded-tasks') || '[]').map(adapterFromLocalStorageDate)
     },
     methods: {
       formatTime,
       formatTimeJobs,
+      formatTimeJobsStandby,
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
         if (checked) {
@@ -309,7 +349,7 @@
     app.tasks = app.tasks.map(item => item)
   }, 1_000)
 
-  function onReceiveMessage(event) {
+  function onReceiveSetDataMessage(event) {
     if (event.data?.type !== "SET-DATA") return;
     const eventItems = event.data.data
 
@@ -319,29 +359,29 @@
 
     const eventItemIds = eventItems.map(item => item.id)
 
-    const modifiedTasks = app.tasks.map(item => {
-      if (item.category !== "Trello") return item;
+    const modifiedTasks = app.tasks.map(eventItem => {
+      if (eventItem.category !== "Trello") return eventItem;
 
-      if (eventItemIds.includes(item.id)) {
+      if (eventItemIds.includes(eventItem.id)) {
         return {
-          ...item,
-          jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
+          ...eventItem,
+          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
             ? { ...job, end: null }
             : job
           ),
-          name: eventItems.find(eventItem => eventItem.id === item.id)?.name || item.name,
+          name: eventItems.find(eventItem => eventItem.id === eventItem.id)?.name || eventItem.name,
           checked: false,
           concludedAt: undefined
         }
       } else {
         return {
-          ...item,
-          jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
+          ...eventItem,
+          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
             ? { ...job, end: new Date() }
             : job
           ),
           checked: true,
-          concludedAt: item.concludedAt || (new Date())
+          concludedAt: eventItem.concludedAt || (new Date())
         }
       }
     })
@@ -374,7 +414,72 @@
       .filter(item => !eventItemIds.includes(item.id))
   }
 
-  window.addEventListener("message", onReceiveMessage)
+  function onReceiveSetStandbyDataMessage(event) {
+    if (event.data?.type !== "SET-DATA-STANDBY") return;
+
+    const eventItems = event.data.data
+
+    if (!Array.isArray(eventItems)) {
+      throw new Error("Array.isArray(items) not is a array")
+    }
+
+    const eventItemIds = eventItems.map(item => item.id)
+
+    const modifiedTasks = app.standbyTasks.map(eventItem => {
+      if (eventItem.category !== "Trello") return eventItem;
+
+      if (eventItemIds.includes(eventItem.id)) {
+        return {
+          ...eventItem,
+          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
+            ? { ...job, end: null }
+            : job
+          ),
+          name: eventItems.find(eventItem => eventItem.id === eventItem.id)?.name || eventItem.name,
+          checked: false,
+          concludedAt: undefined
+        }
+      } else {
+        return {
+          ...eventItem,
+          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
+            ? { ...job, end: new Date() }
+            : job
+          ),
+          checked: true,
+          concludedAt: eventItem.concludedAt || (new Date())
+        }
+      }
+    })
+
+    const modifiedTasksIds = modifiedTasks.map(item => item.id);
+
+    app.standbyTasks = [
+      ...modifiedTasks,
+      ...eventItems
+        .filter(item => !modifiedTasksIds.includes(item.id))
+        .map(item => ({
+          id: item.id,
+          name: item.name,
+          category: "Trello",
+          jobs: [
+            ...(app.concludedTasks.find(itemB => itemB.id === item.id)?.jobs ?? []),
+            {
+              init: new Date(),
+              end: null
+            }
+          ],
+          note: "",
+          createdAt: /* get old date if there is */
+            app.concludedTasks.find(itemB => itemB.id === item.id)?.createdAt
+            ?? new Date()
+        }))
+    ]
+  }
+
+  window.addEventListener("message", onReceiveSetDataMessage)
+
+  window.addEventListener("message", onReceiveSetStandbyDataMessage)
 
   setInterval(() => {
     app.concludedTasks = [

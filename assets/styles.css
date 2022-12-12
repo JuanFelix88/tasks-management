@@ -155,6 +155,10 @@ body {
   margin-right: 5px;
 }
 
+.standby-time {
+  color: rgb(45, 218, 218) !important;
+}
+
 .controls {
   display: flex;
   padding: 5px;
@@ -186,4 +190,8 @@ body {
   background-color: rgb(4, 255, 171);
   color: rgb(49, 49, 49);
   transform: scale(99%);
+}
+
+[data-standby] {
+  opacity: 60%;
 }
