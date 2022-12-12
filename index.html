@@ -22,44 +22,48 @@
       <div class="container-tasks">
         <!-- <h3 class="m-1 p-0">~ Tasks ~</h3> -->
         <ul>
-          <li v-for="(task, index) of tasks" :class="{ 'concluded-task': task.checked }">
-            <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
-              v-model="task.checked">
-            <span class="category">
-              {{task.category}}
-            </span>
-            <div class="separator">
-              ::
-            </div>
-            <span class="name">
-              {{ task.name + (task.note ? ` (${task.note})` : '') }}
-            </span>
-            <div class="separator">
-              ::
-            </div>
-            <span class="time">
-              {{formatTimeJobs(task.jobs)}}
-            </span>
-          </li>
-
-          <li v-for="(task, index) of standbyTasks" :key="'standby-' + task.id" data-standby="true">
-            <input type="checkbox" :value="false" @change="handleChangeStateTask(index)">
-            <span class="category">
-              {{task.category}}
-            </span>
-            <div class="separator">
-              ::
-            </div>
-            <span class="name">
-              {{ task.name + (task.note ? ` (${task.note})` : '') }}
-            </span>
-            <div class="separator">
-              ::
-            </div>
-            <span class="time standby-time">
-              {{formatTimeJobsStandby(task.jobs)}}
-            </span>
-          </li>
+          <template>
+            <li v-for="(task, index) of tasks" :key="task.id" :data-by="task.id"
+              :class="{ 'concluded-task': task.checked }">
+              <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
+                v-model="task.checked">
+              <span class="category">
+                {{task.category}}
+              </span>
+              <div class="separator">
+                ::
+              </div>
+              <span class="name">
+                {{ task.name + (task.note ? ` (${task.note})` : '') }}
+              </span>
+              <div class="separator">
+                ::
+              </div>
+              <span class="time">
+                {{formatTimeJobs(task.jobs)}}
+              </span>
+            </li>
+          </template>
+          <template>
+            <li v-for="(task, index) of standbyTasks" :key="task.id" :data-by="task.id" data-standby="true">
+              <input type="checkbox" :value="false" @change="handleChangeStateTask(index)">
+              <span class="category">
+                {{task.category}}
+              </span>
+              <div class="separator">
+                ::
+              </div>
+              <span class="name">
+                {{ task.name + (task.note ? ` (${task.note})` : '') }}
+              </span>
+              <div class="separator">
+                ::
+              </div>
+              <span class="time standby-time">
+                {{formatTimeJobsStandby(task.jobs)}}
+              </span>
+            </li>
+          </template>
 
         </ul>
       </div>
@@ -425,29 +429,29 @@
 
     const eventItemIds = eventItems.map(item => item.id)
 
-    const modifiedTasks = app.standbyTasks.map(eventItem => {
-      if (eventItem.category !== "Trello") return eventItem;
+    const modifiedTasks = app.standbyTasks.map(standbyTask => {
+      if (standbyTask.category !== "Trello") return standbyTask;
 
-      if (eventItemIds.includes(eventItem.id)) {
+      if (eventItemIds.includes(standbyTask.id)) {
         return {
-          ...eventItem,
-          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
+          ...standbyTask,
+          jobs: standbyTask.jobs.map((job, i) => standbyTask.jobs.length === (i + 1)
             ? { ...job, end: null }
             : job
           ),
-          name: eventItems.find(eventItem => eventItem.id === eventItem.id)?.name || eventItem.name,
+          name: eventItems.find(eventItem => eventItem.id === eventItem.id)?.name || standbyTask.name,
           checked: false,
           concludedAt: undefined
         }
       } else {
         return {
-          ...eventItem,
-          jobs: eventItem.jobs.map((job, i) => eventItem.jobs.length === (i + 1)
+          ...standbyTask,
+          jobs: standbyTask.jobs.map((job, i) => standbyTask.jobs.length === (i + 1)
             ? { ...job, end: new Date() }
             : job
           ),
           checked: true,
-          concludedAt: eventItem.concludedAt || (new Date())
+          concludedAt: standbyTask.concludedAt || (new Date())
         }
       }
     })
@@ -475,11 +479,13 @@
             ?? new Date()
         }))
     ]
+
+    console.log(app.standbyTasks)
   }
 
   window.addEventListener("message", onReceiveSetDataMessage)
 
-  window.addEventListener("message", onReceiveSetStandbyDataMessage)
+  // window.addEventListener("message", onReceiveSetStandbyDataMessage)
 
   setInterval(() => {
     app.concludedTasks = [
