@@ -22,7 +22,7 @@
       <div class="container-tasks">
         <!-- <h3 class="m-1 p-0">~ Tasks ~</h3> -->
         <ul>
-          <li v-for="(task, index) of tasks" :key="task.id" :data-by="task.id"
+          <li v-for="(task, index) of tasks" @click="handleDispatchTaskClick(task.id)" :key="task.id" :data-by="task.id"
             :class="{ 'concluded-task': task.checked }">
             <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
               v-model="task.checked">
@@ -42,7 +42,8 @@
               {{formatTimeJobs(task.jobs)}}
             </span>
           </li>
-          <li v-for="(task, index) of standbyTasks" :key="'standby' + task.id" :data-by="task.id" data-standby="true">
+          <li v-for="(task, index) of standbyTasks" :key="'standby' + task.id" @click="handleDispatchTaskClick(task.id)"
+            :data-by="task.id" data-standby="true">
             <input type="checkbox" :value="false" @change="handleChangeStateTask(index)">
             <span class="category">
               {{task.category}}
@@ -299,6 +300,12 @@
       formatTime,
       formatTimeJobs,
       formatTimeJobsStandby,
+      handleDispatchTaskClick(id) {
+        window.parent?.postMessage({
+          type: 'TASK-CLICK',
+          data: { id },
+        }, "*")
+      },
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
         if (checked) {

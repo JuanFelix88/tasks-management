@@ -121,6 +121,7 @@ body {
   user-select: none;
   margin: 3px 0;
   box-shadow: 0 0 3px rgba(139, 139, 139, 0.521);
+  cursor: pointer;
 }
 
 .concluded-task {
