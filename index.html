@@ -419,6 +419,9 @@
 
     app.concludedTasks = app.concludedTasks
       .filter(item => !eventItemIds.includes(item.id))
+
+    app.standbyTasks = app.standbyTasks
+      .filter(item => !eventItemIds.includes(item.id))
   }
 
   function onReceiveSetStandbyDataMessage(event) {
@@ -486,6 +489,8 @@
   window.addEventListener("message", onReceiveSetDataMessage)
 
   window.addEventListener("message", onReceiveSetStandbyDataMessage)
+
+  console.log('1.0.1')
 
   setInterval(() => {
     app.concludedTasks = [
