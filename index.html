@@ -434,32 +434,35 @@
 
     const eventItemIds = eventItems.map(item => item.id)
 
-    const modifiedTasks = app.standbyTasks.map(item => {
-      if (item.category !== "Trello") return item;
+    const modifiedTasks = app
+      .standbyTasks
+      .filter(standbyTask => eventItemIds.includes(standbyTask.id))
+      .map(item => {
+        if (item.category !== "Trello") return item;
 
-      if (eventItemIds.includes(item.id)) {
-        return {
-          ...item,
-          jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
-            ? { ...job, end: null }
-            : job
-          ),
-          name: eventItems.find(eventItem => eventItem.id === item.id)?.name || item.name,
-          checked: false,
-          concludedAt: undefined
+        if (eventItemIds.includes(item.id)) {
+          return {
+            ...item,
+            jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
+              ? { ...job, end: null }
+              : job
+            ),
+            name: eventItems.find(eventItem => eventItem.id === item.id)?.name || item.name,
+            checked: false,
+            concludedAt: undefined
+          }
+        } else {
+          return {
+            ...item,
+            jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
+              ? { ...job, end: new Date() }
+              : job
+            ),
+            checked: true,
+            concludedAt: item.concludedAt || (new Date())
+          }
         }
-      } else {
-        return {
-          ...item,
-          jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
-            ? { ...job, end: new Date() }
-            : job
-          ),
-          checked: true,
-          concludedAt: item.concludedAt || (new Date())
-        }
-      }
-    })
+      })
 
     const modifiedTasksIds = modifiedTasks.map(item => item.id);
 
@@ -490,7 +493,7 @@
 
   window.addEventListener("message", onReceiveSetStandbyDataMessage)
 
-  console.log('1.0.1')
+  console.log('1.0.2')
 
   setInterval(() => {
     app.concludedTasks = [
