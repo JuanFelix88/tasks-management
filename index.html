@@ -305,6 +305,10 @@
           type: 'TASK-CLICK',
           data: { id },
         }, "*")
+        window.postMessage({
+          type: 'TASK-CLICK',
+          data: { id },
+        }, "*")
       },
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
