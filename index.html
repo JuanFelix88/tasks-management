@@ -301,11 +301,7 @@
       formatTimeJobs,
       formatTimeJobsStandby,
       handleDispatchTaskClick(id) {
-        window.parent?.postMessage({
-          type: 'TASK-CLICK',
-          data: { id },
-        }, "*")
-        window.postMessage({
+        window.opener?.parent?.postMessage({
           type: 'TASK-CLICK',
           data: { id },
         }, "*")
