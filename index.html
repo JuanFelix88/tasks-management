@@ -305,6 +305,10 @@
           type: 'TASK-CLICK',
           data: { id },
         }, "*")
+
+        const allTasksList = [...this.tasks, ...this.standbyTasks]
+        this.tasks = allTasksList.filter(task => task.id === id)
+        this.standbyTasks = this.standbyTasks.filter(standbyTask => standbyTask.id !== id)
       },
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
