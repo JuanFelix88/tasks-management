@@ -487,8 +487,7 @@
             app.concludedTasks.find(itemB => itemB.id === item.id)?.createdAt
             ?? new Date()
         }))
-        .sort((a, b) => Number(a.id.replace('Nº', '')) < Number(b.id.replace('Nº', '')) ? 1 : -1)
-    ]
+    ].sort((a, b) => Number(a.id.replace('Nº', '')) < Number(b.id.replace('Nº', '')) ? 1 : -1)
   }
 
   window.addEventListener("message", onReceiveSetDataMessage)
