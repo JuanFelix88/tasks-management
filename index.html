@@ -427,20 +427,21 @@
   function onReceiveSetStandbyDataMessage(event) {
     if (event.data?.type !== "SET-DATA-STANDBY") return;
     const eventItems = event.data.data
+      .filter(eventTask => !this.tasks.some(task => task.id === eventTask.id))
 
     if (!Array.isArray(eventItems)) {
       throw new Error("Array.isArray(items) not is a array")
     }
 
-    const eventItemIds = eventItems.map(item => item.id)
+    const tasksIdsListExtractedFromEvent = eventItems.map(item => item.id)
 
     const modifiedTasks = app
       .standbyTasks
-      .filter(standbyTask => eventItemIds.includes(standbyTask.id))
+      .filter(standbyTask => tasksIdsListExtractedFromEvent.includes(standbyTask.id))
       .map(item => {
         if (item.category !== "Trello") return item;
 
-        if (eventItemIds.includes(item.id)) {
+        if (tasksIdsListExtractedFromEvent.includes(item.id)) {
           return {
             ...item,
             jobs: item.jobs.map((job, i) => item.jobs.length === (i + 1)
