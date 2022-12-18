@@ -305,25 +305,6 @@
           type: 'TASK-CLICK',
           data: { id },
         }, "*")
-
-        const allTasksList = [...this.tasks, ...this.standbyTasks]
-        const actualTask = this.tasks[0]
-        this.tasks = allTasksList.filter(task => task.id === id)
-        this.standbyTasks = this.standbyTasks.filter(standbyTask => standbyTask.id !== id)
-        this.concludedTasks = [...this.concludedTasks, {
-          ...actualTask,
-          jobs: actualTask.jobs.map((job, i) => {
-            if (i === (actualTask.jobs.length - 1)) {
-              return {
-                ...job,
-                end: new Date()
-              }
-            }
-            return job
-          }),
-          checked: true,
-          concludedAt: new Date()
-        }]
       },
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
