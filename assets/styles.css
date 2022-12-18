@@ -130,6 +130,7 @@ body {
 
 .container-tasks>ul>li:hover {
   background-color: rgb(89, 0, 255);
+  opacity: 100%;
 }
 
 .container-tasks>ul>li>input {
@@ -194,5 +195,9 @@ body {
 }
 
 [data-standby] {
-  opacity: 50%;
+  opacity: 60%;
+}
+
+[data-selected="true"]:hover {
+  background-color: rgb(62, 63, 65) !important;
 }

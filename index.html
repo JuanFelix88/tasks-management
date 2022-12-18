@@ -22,7 +22,7 @@
       <div class="container-tasks">
         <!-- <h3 class="m-1 p-0">~ Tasks ~</h3> -->
         <ul>
-          <li v-for="(task, index) of tasks" @click="handleDispatchTaskClick(task.id)" :key="task.id" :data-by="task.id"
+          <li v-for="(task, index) of tasks" data-selected="true" :key="task.id" :data-by="task.id"
             :class="{ 'concluded-task': task.checked }">
             <input type="checkbox" :checked="task.checked" @change="handleChangeStateTask(index)"
               v-model="task.checked">
@@ -307,8 +307,23 @@
         }, "*")
 
         const allTasksList = [...this.tasks, ...this.standbyTasks]
+        const actualTask = this.tasks[0]
         this.tasks = allTasksList.filter(task => task.id === id)
         this.standbyTasks = this.standbyTasks.filter(standbyTask => standbyTask.id !== id)
+        this.concludedTasks = [...this.concludedTasks, {
+          ...actualTask,
+          jobs: actualTask.jobs.map((job, i) => {
+            if (i === (actualTask.jobs.length - 1)) {
+              return {
+                ...job,
+                end: new Date()
+              }
+            }
+            return job
+          }),
+          checked: true,
+          concludedAt: new Date()
+        }]
       },
       handleChangeStateTask(index) {
         const { checked } = this.tasks[index]
@@ -517,7 +532,7 @@
       )
       localStorage.setItem('@tasks', JSON.stringify(app.tasks.map(adapterToLocalStorageDate)))
     })
-  }, 15_000)
+  }, 10_000)
 
 
 </script>
