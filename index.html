@@ -427,7 +427,7 @@
   function onReceiveSetStandbyDataMessage(event) {
     if (event.data?.type !== "SET-DATA-STANDBY") return;
     const eventItems = event.data.data
-      .filter(eventTask => !this.tasks.some(task => task.id === eventTask.id))
+      .filter(eventTask => !app.tasks.some(task => task.id === eventTask.id))
 
     if (!Array.isArray(eventItems)) {
       throw new Error("Array.isArray(items) not is a array")
