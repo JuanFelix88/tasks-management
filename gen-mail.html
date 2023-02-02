@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Generate Email Schedule</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,300&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+
+<script src="mail.js"></script>
+
+<body>
+  <div id="app" style="display: block; ;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+    <h1>O download será iniciado!</h1>
+  </div>
+</body>
+
+<script>
+  async function downloadFile(data, filename) {
+    console.log(filename)
+    const file = new Blob([data], { type: "text/plain" });
+    const buttonDownload = document.createElement('a')
+
+    document.body.appendChild(buttonDownload);
+
+    buttonDownload.href = URL.createObjectURL(file);
+    buttonDownload.download = filename;
+    buttonDownload.removeAttribute('disabled');
+    buttonDownload.click();
+    buttonDownload.remove
+  }
+
+  const queryParams = new URLSearchParams(location.search);
+
+  setTimeout(() => {
+    downloadFile(mail
+      .replace('$vehicle', queryParams.get('vehicle'))
+      .replace('$location', queryParams.get('location'))
+      .replace('$schedule', queryParams.get('schedule'))
+      .replace('$os', queryParams.get('os'))
+      .replace('$forn_name', queryParams.get('forn_name'))
+      .replace('$service', queryParams.get('service'))
+      .replace('$forn', queryParams.get('forn'))
+      .replace('$os_internal', queryParams.get('os_internal')),
+      `${queryParams.get('vehicle')} - OS${queryParams.get('os_internal')}.eml`
+    )
+  }, 500)
+</script>
+
+</html>
