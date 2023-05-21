@@ -52,6 +52,10 @@
       `${queryParams.get('vehicle')} - OS${queryParams.get('os_internal')}.eml`
     )
   }, 500)
+
+  setTimeout(() => {
+    window.close()
+  }, 10_000)
 </script>
 
 </html>
